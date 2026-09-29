@@ -2,11 +2,11 @@
 
 ## Überblick ##
 
-In dieser Vorlesung lernen Sie, wie Sie luftgestützte Laserscanning-Daten in R mit dem Paket lidR laden, visualisieren und verarbeiten. Der Schwerpunkt liegt auf etablierten Verfahren zur Erstellung von Standardprodukten wie digitalen Geländemodellen, Kronenhöhenmodellen sowie Gittern mit LiDAR-Punktmetriken. Außerdem lernen Sie eine vergleichsweise einfache Methode kennen, um Bäume aus einer LiDAR-Punktwolke eines bewaldeten Gebiets zu identifizieren. Die meisten Inhalte dieses Tutorials basieren auf der offiziellen Dokumentation des Pakets lidR, die hier zu finden ist:
+In diesem Tutorial lernen Sie, wie Sie mittels Flugzeug erhobene Laserscanning-Daten in R mit dem Paket lidR laden, visualisieren und verarbeiten. Der Schwerpunkt liegt auf etablierten Verfahren zur Erstellung von Standardprodukten wie digitalen Geländemodellen, Kronenhöhenmodellen sowie Gittern mit LiDAR-Punktmetriken. Außerdem lernen Sie eine vergleichsweise einfache Methode kennen, um Einzelbäume aus einer LiDAR-Punktwolke eines bewaldeten Gebiets zu identifizieren. Die meisten Inhalte dieses Tutorials basieren auf der offiziellen Dokumentation des Pakets lidR, die hier zu finden ist:
 
 [https://r-lidar.github.io/lidRbook/](https://r-lidar.github.io/lidRbook/)
 
-Einige Inhalte wurden direkt kopiert und eingefügt, während andere Teile um Informationen ergänzt wurden, die ich für relevant hielt. Allen, die sich für dieses Thema interessieren, empfehle ich dringend, den oben genannten Link genauer anzusehen und auch die zusätzlichen praktischen Übungen zu bearbeiten, die dort angeboten werden und in diesem Tutorial nicht behandelt werden.
+Einige Inhalte wurden direkt von der Seite kopiert und übersetzt, während andere Teile um Informationen ergänzt wurden, die ich für relevant hielt. Allen, die sich für dieses Thema interessieren, empfehle ich dringend, den oben genannten Link genauer anzusehen und auch die zusätzlichen Übungen zu bearbeiten, die dort beschrieben werden und in diesem Tutorial nicht behandelt werden.
 
 ## Lernziele ##
 
@@ -14,7 +14,7 @@ Sie machen sich mit dem Paket lidR vertraut und erwerben Kenntnisse zur Verarbei
 
 - in .laz- oder .las-Dateien gespeicherte LiDAR-Daten laden und visualisieren
 - die LiDAR-Punktwolke anhand von Attributen filtern
-- eine LiDAR-Punktwolke in Bodenpunkte und andere Rückläufe klassifizieren
+- eine LiDAR-Punktwolke in Bodenpunkte und andere Punkte (hier i.d.R. Vegetation) klassifizieren
 - digitale Höhenmodelle berechnen (digitales Geländemodell / Kronenhöhenmodell)
 - höhennormalisierte Punktwolken erstellen
 - Baumspitzen aus einer Punktwolke extrahieren
@@ -23,7 +23,7 @@ Sie machen sich mit dem Paket lidR vertraut und erwerben Kenntnisse zur Verarbei
 
 ## Im Tutorial verwendeter Datensatz ##
 
-Der im Tutorial verwendete Datensatz stammt aus einer luftgestützten Laserscanning-Erhebung, die im Sommer 2019 in Süddeutschland durchgeführt wurde. Der Datensatz wurde im Juli 2019 unter belaubten Bedingungen mit einem luftgestützten Laserscanner RIEGL VQ-780i aufgenommen, der auf einer Cessna C207 montiert war. Das Laserscanning wurde mit einer Strahldivergenz von 25 mm/rad, einer Pulswiederholrate von 1000 kHz und einer Scanfrequenz von 225 Linien pro Sekunde durchgeführt. Die Flughöhe betrug etwa 650 m über dem Boden, die Fluggeschwindigkeit ungefähr 51 m/s und die Streifenüberlappung 76 Prozent. Der daraus resultierende mittlere Punktabstand betrug 28 cm. Die Punktdichten in den Untersuchungsflächen lagen zwischen 136 und 164 Punkten/m². Die Pulsdichten lagen zwischen 70 und 78 Pulsen/m². Der Datensatz ist eine kleine Teilmenge der Punktwolke, die eine Fläche von ungefähr 130 x 130 m abdeckt und als .laz-Datei gespeichert ist. Für dieses Gebiet wurden im Gelände alle Bäume mit einem BHD > 5 cm erfasst und Brusthöhendurchmesser, Baumart sowie die Position des Baumes aufgenommen. Die entsprechenden Daten werden als Point-Shapefile bereitgestellt.
+Der im Tutorial verwendete Datensatz stammt aus einer luftgestützten Laserscanning-Erhebung, die im Sommer 2019 in Süddeutschland durchgeführt wurde. Der Datensatz wurde im Juli 2019 unter belaubten Bedingungen mit einem Laserscanner RIEGL VQ-780i aufgenommen, der auf einer Cessna C207 montiert war. Das Laserscanning wurde mit einer Strahldivergenz von 25 mm/rad, einer Pulswiederholrate von 1000 kHz und einer Scanfrequenz von 225 Linien pro Sekunde durchgeführt. Die Flughöhe betrug etwa 650 m über dem Boden, die Fluggeschwindigkeit ungefähr 51 m/s und die Streifenüberlappung 76 Prozent. Der daraus resultierende mittlere Punktabstand betrug 28 cm. Die Punktdichten in den Untersuchungsflächen lagen zwischen 136 und 164 Punkten/m². Die Pulsdichten lagen zwischen 70 und 78 Pulsen/m². Der Datensatz ist eine kleine Teilmenge der Punktwolke, die eine Fläche von ungefähr 130 x 130 m abdeckt und als .laz-Datei gespeichert ist. Für dieses Gebiet wurden im Gelände alle Bäume mit einem BHD > 5 cm erfasst und Brusthöhendurchmesser, Baumart sowie die Position des Baumes aufgenommen. Die entsprechenden Daten werden als Point-Shapefile bereitgestellt.
 
 Die .laz-Datei und das Shapefile können als ZIP-Archiv hier heruntergeladen werden:
 
@@ -46,7 +46,7 @@ Die Entwicklung des Pakets lidR zwischen 2015 und 2018 wurde durch die finanziel
 
 Sensoren für ALS mit diskreten Rückläufen erfassen eine Reihe von Daten. An erster Stelle stehen Positionsdaten in drei Dimensionen (X,Y,Z) – dies wird normalerweise als „Punktwolke“ bezeichnet. Die einfachsten Punktwolken enthalten nur Informationen über die X-, Y- und Z-Position und sonst nichts. Die meisten Laserscanning-Sensoren erfassen jedoch zusätzliche Informationen, beispielsweise die Intensität für jeden Punkt, die Position jedes Punktes in der Rücklaufsequenz (denken Sie an die im theoretischen Teil besprochenen „Multi-Return“-Fähigkeiten eines einzelnen Laserstrahls) oder den Einfallswinkel des Strahls für jeden Punkt. Aufgrund der häufig enormen Datenmengen, die während einer Laserscanning-Erhebung gesammelt werden, ist das Lesen, Schreiben und effiziente Speichern von Laserscanning-Daten ein kritischer Schritt vor jeder weiteren Analyse.
 
-ALS-Daten werden am häufigsten im LAS-Format verteilt, das speziell dafür entwickelt wurde, ALS-Daten standardisiert zu speichern. Diese Daten werden von der American Society for Photogrammetry & Remote Sensing (ASPRS) offiziell dokumentiert und gepflegt. LAS-Dateien benötigen jedoch viel Speicher, da sie nicht komprimiert sind. Das LAZ-Format hat sich als Standard für die Komprimierung etabliert, da es kostenlos und Open Source ist.
+ALS-Daten werden am häufigsten im LAS-Format gespeichert, das speziell dafür entwickelt wurde, ALS-Daten standardisiert zu speichern. Das DAteiformat wird mittlerweile von der American Society for Photogrammetry & Remote Sensing (ASPRS) offiziell dokumentiert und gepflegt. LAS-Dateien benötigen jedoch viel Speicher, da sie nicht komprimiert sind. Das LAZ-Format hat sich als Standard für die Komprimierung etabliert, da es kostenlos und Open Source ist.
 
 Die weite Verbreitung, Standardisierung und der Open-Source-Charakter der LAS- und LAZ-Formate haben die Entwicklung des Pakets lidR gefördert. Es wurde entwickelt, um LAS- und LAZ-Dateien sowohl als Eingabe als auch als Ausgabe zu verarbeiten und dabei über das Paket rlas die C++-Bibliotheken LASlib und LASzip zu nutzen.
 
@@ -55,9 +55,14 @@ Die Funktion readLAS() liest eine LAS- oder LAZ-Datei ein und gibt ein Objekt de
 - Der Header, der zusammenfassende Informationen über den Inhalt speichert, einschließlich der Bounding Box der Datei, des Koordinatenreferenzsystems und des Punktformats.
 - Die Nutzdaten, also die eigentliche Punktwolke.
 
-Die Funktion readLAS() liest eine Datei ein und erstellt ein Objekt, das sowohl den Header als auch die Nutzdaten enthält. Wir beginnen nun mit dem praktischen Teil, indem wir den folgenden Code in R ausführen. Lesen Sie auch die Kommentare im Code sorgfältig. Zunächst laden wir alle benötigten Pakete. R gibt eine Warnmeldung aus, falls ein Paket noch nicht installiert ist. Falls dies der Fall ist, installieren Sie die Pakete entweder über das Hauptmenü von RStudio, indem Sie „Tools“ => „Install packages“ auswählen und anschließend dem erscheinenden Dialog folgen, oder indem Sie den entsprechenden R-Code zum Installieren der Pakete in die Konsole eingeben. Um beispielsweise das Paket „raster“ zu installieren, verwenden Sie den folgenden Code:
+Die Funktion readLAS() liest eine Datei ein und erstellt ein Objekt, das sowohl den Header als auch die Nutzdaten enthält. Wir beginnen nun mit dem praktischen Teil, indem wir den folgenden Code in R ausführen. Lesen Sie auch die Kommentare im Code sorgfältig. Zunächst laden wir alle benötigten Pakete. R gibt eine Warnmeldung aus, falls ein Paket noch nicht installiert ist. Falls dies der Fall ist, installieren Sie die Pakete entweder über das Hauptmenü von RStudio, indem Sie „Tools“ => „Install packages“ auswählen und anschließend dem erscheinenden Dialog folgen, oder indem Sie den entsprechenden R-Code zum Installieren der Pakete in die Konsole eingeben. Um beispielsweise das Paket „terra“ zu installieren, verwenden Sie den folgenden Code:
 
-	install.packages("raster")
+	install.packages("terra")
+
+Für das lidR-Paket welches wir im folgenden hauptsächlich verwenden wäre es entsprechend:
+
+	install.packages("lidR")
+
 
 Aber jetzt laden wir die Pakete und den Datensatz
 	
