@@ -533,4 +533,15 @@ Dies führt zu:
 
 Diese Metriken können beispielsweise mit im Gelände erhobenen Waldmerkmalen in Beziehung gesetzt werden. Regressionsmodelle können trainiert werden, um zunächst die im Gelände gemessenen Daten mit den Metriken in Beziehung zu setzen und anschließend mit dem trainierten Modell das gesamte Gebiet vorherzusagen, für das Laserscanning-Daten erhoben wurden.
 
+### Hausaufgabe
+
+Zur Vertiefung können Sie hier nochmal einen weiteren ALS Datensatz herunterladen:
+
+https://drive.google.com/file/d/14JJDRYXc0m6ykAibSoKaxVzxy2sJDXY2/view?usp=sharing
+
+Bitte prozessieren Sie diesen Datensatz mit denselben Schritten wie oben im Tutorial beschrieben und führen Sie eine Einzelbaumerkennung für den Datensatz durch. Als Nachweis, dass Sie die Hausaufgabe durchgeführt haben, laden Sie bitte eine Powerpoint-Präsentation oder ein Worddokument, export als PDF hoch mit folgenden Inhalten:
+
+1. Screenshort des Plots des Ergebnisses der Einzelbaumerkennung
+2. Die Anzahl der erkannten Bäume, sowie die Anzahl der Bäume pro Hektar (überlegen Sie, wie Sie diese Information ableiten können)
+3. Die Höhe des höchsten Baumes im Datensatz (überlegen Sie, wie Sie diese Information ableiten können)
 
