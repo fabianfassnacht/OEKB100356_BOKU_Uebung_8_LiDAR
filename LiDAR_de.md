@@ -73,9 +73,9 @@ Aber jetzt laden wir die Pakete und den Datensatz
 	
 	# installing the lidR package (only required one time)
 	# if the package is not installed yet
-
+	# install.packages("lidR")
 	
-	# loading the lidR package
+	# loading the required packages
 	require(lidR)
 	require(stars)
 	require(terra)
@@ -100,7 +100,7 @@ Dies sollte die folgenden Ausgaben liefern:
 
 ![](Fig01.png)
 
-Wir sehen, dass eine ganze Menge Informationen angezeigt wird, aber wir werden nicht auf jedes Detail eingehen. Einige interessante Punkte sind beispielsweise, dass die Gesamtzahl der **Punkte** 1,74 Millionen beträgt und wir anhand der im Attribut **extent** angegebenen Koordinaten sehen können, dass die Fläche ungefähr 130 x 130 m groß ist. Außerdem sehen wir, dass der Datei derzeit kein **Koordinatenreferenzsystem** zugewiesen ist.
+Wir sehen, dass eine ganze Menge Informationen angezeigt wird, aber wir werden hier nicht auf jedes Detail eingehen. Einige interessante Punkte sind beispielsweise, dass die Gesamtzahl der **Punkte** 1,74 Millionen beträgt und wir anhand der im Attribut **extent** angegebenen Koordinaten sehen können, dass die Fläche ungefähr 130 x 130 m groß ist. Außerdem sehen wir, dass der Datei derzeit kein **Koordinatenreferenzsystem** zugewiesen ist.
 
 Durch die einfache Verwendung des Befehls readLAS() haben wir den vollständigen Datensatz in R geladen – dies ist in vielen Situationen eine gute Wahl. Wie wir jedoch am Attribut **memory** sehen können, haben wir dabei auch einen ziemlich großen Datensatz von 205,5 MB geladen (daher wurde die ursprüngliche Dateigröße der komprimierten LAZ-Datei um fast das Zehnfache erhöht, da die ursprüngliche LAZ-Datei ungefähr 23 MB groß ist).
 
@@ -488,7 +488,7 @@ Dies führt zu leicht unterschiedlichen Ergebnissen:
 	
 ![](Fig22.png)		
 
-Die Identifizierung des optimalen Parameters ist keine einfache Aufgabe und kann eine Art Referenzdaten erfordern, die beispielsweise durch visuelle Interpretation eines CHM oder durch die Identifizierung von Baumstammpositionen im Gelände gewonnen werden können. Letzteres ist jedoch häufig ebenfalls fehleranfällig, da die genaue Position eines Baumes im Gelände zu bestimmen keine triviale Aufgabe ist. Hinzu kommt, dass die Stammposition am Boden nicht unbedingt direkt mit der Spitze der Krone zusammenhängt, da viele Bäume nicht exakt vertikal wachsen.
+Die Identifizierung des optimalen Parameters ist keine einfache Aufgabe und kann durch Referenzdaten verbessert werden, die beispielsweise durch visuelle Interpretation eines CHM oder durch die Identifizierung von Baumstammpositionen im Gelände gewonnen werden können. Letzteres ist jedoch häufig ebenfalls fehleranfällig, da die genaue Position eines Baumes im Gelände zu bestimmen keine triviale Aufgabe ist. Hinzu kommt, dass die Stammposition am Boden nicht unbedingt direkt mit der Spitze der Krone zusammenhängt, da viele Bäume nicht exakt vertikal wachsen.
 
 Die Erkennung von Baumspitzen ist normalerweise nur der erste Schritt bei der Abgrenzung/Segmentierung einzelner Bäume, da sie noch nicht ermöglicht, die Kronenfläche eines Baumes zu identifizieren. lidR stellt auch für diese Aufgabe Funktionen bereit, aber wir werden dies hier anhand unseres Beispieldatensatzes nicht demonstrieren. Unter anderem, weil unserem Datensatz ein Koordinatenreferenzsystem fehlt (das zunächst zugewiesen werden müsste) und die Funktionen nicht unmittelbar funktionieren werden. Sie können diese Funktionen jedoch gerne auch mit den Beispieldatensätzen ausprobieren, die mit lidR geliefert werden. Die entsprechenden Daten und Anweisungen finden Sie im lidR-Buch (siehe Link am Anfang des Tutorials).
 
@@ -509,7 +509,7 @@ oder für ein Hexagon-Gitter:
 	
 Die Namen der erhaltenen Metriken können durch Ausführen von Folgendem ermittelt werden:
 
-	a@ptr$names
+	names(a)
 
 Dies führt zur folgenden Ausgabe:
 
@@ -533,4 +533,4 @@ Dies führt zu:
 
 Diese Metriken können beispielsweise mit im Gelände erhobenen Waldmerkmalen in Beziehung gesetzt werden. Regressionsmodelle können trainiert werden, um zunächst die im Gelände gemessenen Daten mit den Metriken in Beziehung zu setzen und anschließend mit dem trainierten Modell das gesamte Gebiet vorherzusagen, für das Laserscanning-Daten erhoben wurden.
 
-Dies war der letzte Schritt dieses Tutorials, und Sie sind nun bestens vorbereitet, mit den Punktwolken zu arbeiten, die wir während der Feldwoche dieses Kurses erfassen werden.
+
